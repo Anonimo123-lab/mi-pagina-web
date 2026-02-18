@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Alexa</title>
+<style>
+body {
+background: #f0f4f8;
+color: #334e68;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+}
+.card {
+background: white;
+padding: 40px;
+border-radius: 20px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+text-align: center;
+max-width: 400px;
+width: 90%;
+border-top: 5px solid #62b6cb;
+}
+h2 { color: #1b4965; margin-bottom: 20px; }
+p { line-height: 1.6; }
+input {
+padding: 12px;
+width: 80%;
+border: 2px solid #bee9e8;
+border-radius: 10px;
+margin-top: 15px;
+outline: none;
+font-size: 1rem;
+}
+button {
+background: #1b4965;
+color: white;
+border: none;
+padding: 12px 25px;
+border-radius: 10px;
+font-weight: bold;
+cursor: pointer;
+margin-top: 20px;
+transition: 0.3s;
+}
+button:hover { background: #62b6cb; }
+.hidden { display: none; }
+.pista {
+font-size: 3rem;
+font-weight: bold;
+color: #62b6cb;
+margin: 20px 0;
+}
+.btn-opcion { background: #5fa8d3; margin: 5px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+<div id="inicio">
+<h2>Hola, Alexa</h2>
+<p>Me gustaría que nos diéramos una oportunidad para conocernos. Pero antes... ¿me ayudas con este acertijo?</p>
+<p><i>"Casi todos lo tienen, pero nadie lo puede perder. ¿Qué es?"</i></p>
+<input type="text" id="respuesta" placeholder="Escribe aquí...">
+<br>
+<button onclick="validar()">Descubrir letra</button>
+</div>
+
+<div id="paso2" class="hidden">
+<h2>¡Logrado!</h2>
+<p>Aquí tienes la primera letra de mi nombre:</p>
+<div class="pista">O</div>
+<p>Anota esta letra y espera la del lunes. <br> Para ir planeando... ¿Qué te gusta más?</p>
+<button class="btn-opcion" onclick="enviar('Café')">☕ Un café</button>
+<button class="btn-opcion" onclick="enviar('Helado')">🍦 Un helado</button>
+</div>
+
+<div id="final" class="hidden">
+<h2>¡Perfecto!</h2>
+<p>Tu elección ha sido guardada. El lunes te daré la siguiente pista para completar mi nombre.</p>
+<p>Bonito fin de semana, Alexa.</p>
+</div>
+</div>
+
+<script>
+function validar() {
+let r = document.getElementById('respuesta').value.toLowerCase().trim();
+if(r.includes("sombra")) {
+document.getElementById('inicio').classList.add('hidden');
+document.getElementById('paso2').classList.remove('hidden');
+} else {
+alert("Inténtalo de nuevo, ¡tú puedes!");
+}
+}
+
+function enviar(opcion) {
+// GERARDO: Pon aquí tu ID de Formspree
+const formID = "2939466759683440576";
+
+fetch(`https://formspree.io/f/${formID}`, {
+method: 'POST',
+body: JSON.stringify({
+nombre: "Alexa",
+prefiriere: opcion,
+fase: "Viernes - Letra O"
+}),
+headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+}).then(() => {
+document.getElementById('paso2').classList.add('hidden');
+document.getElementById('final').classList.remove('hidden');
+});
+}
+</script>
+
+</body>
+</html>
